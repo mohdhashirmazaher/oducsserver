@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head style="background-color:aquamarine">
+    <title>Computer Science Server Status</title>
+</head>
+<body>
+    <h1>Computer Science Server Status</h1>
+    <ul>
+    {% for server, info in statuses.items() %}
+        <li>
+            <strong>{{ server }}</strong><br>
+            {% if info.status %}
+                <span style="color: green;">The server is up and running!</span><br>
+                <span>Response Time: {{ info.response_time }} seconds</span><br>
+            {% else %}
+                <span style="color: red;">The server is down.</span><br>
+            {% endif %}
+            <span>Last Checked: {{ info.last_checked }}</span>
+        </li>
+    {% endfor %}
+    </ul>
+</body>
+</html>
