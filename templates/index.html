@@ -1,23 +1,87 @@
 <!DOCTYPE html>
 <html>
-<head style="background-color:aquamarine">
+<head>
     <title>Computer Science Server Status</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .server-status {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .server-status h2 {
+            margin-top: 0;
+        }
+        .up {
+            color: green;
+        }
+        .down {
+            color: red;
+        }
+        .headers {
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .headers ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .headers ul li {
+            margin-bottom: 5px;
+        }
+    </style>
 </head>
 <body>
     <h1>Computer Science Server Status</h1>
-    <ul>
-    {% for server, info in statuses.items() %}
-        <li>
-            <strong>{{ server }}</strong><br>
-            {% if info.status %}
-                <span style="color: green;">The server is up and running!</span><br>
-                <span>Response Time: {{ info.response_time }} seconds</span><br>
-            {% else %}
-                <span style="color: red;">The server is down.</span><br>
-            {% endif %}
-            <span>Last Checked: {{ info.last_checked }}</span>
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#current-status">Current Status</a>
         </li>
-    {% endfor %}
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#historical-data">Historical Data</a>
+        </li>
     </ul>
+
+    <div class="tab-content">
+        <div id="current-status" class="container tab-pane active"><br>
+            {% for server, info in statuses.items() %}
+                <div class="server-status">
+                    <h2>{{ server }}</h2>
+                    {% if info.status %}
+                        <p class="up">The server is up and running!</p>
+                        <p>Response Time: {{ info.response_time }} seconds</p>
+                    {% else %}
+                        <p class="down">The server is down.</p>
+                    {% endif %}
+                    <div class="headers">
+                        <h3>Headers:</h3>
+                        <ul>
+                            {% for header, value in info.headers.items() %}
+                                <li><strong>{{ header }}:</strong> {{ value }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <p>Last Checked: {{ info.last_checked }}</p>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div id="historical-data" class="container tab-pane fade"><br>
+            <iframe src="/historical" style="width:100%; height:600px; border:none;"></iframe>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

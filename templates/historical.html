@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Historical Data</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .server-status {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .server-status h2 {
+            margin-top: 0;
+        }
+        .up {
+            color: green;
+        }
+        .down {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Historical Data</h1>
+    {% for server, data in historical_data.items() %}
+        <div class="server-status">
+            <h2>{{ server }} - Historical Data</h2>
+            <ul>
+                {% for entry in data %}
+                    <li>
+                        {% if entry.status %}
+                            <span class="up">Up</span>
+                        {% else %}
+                            <span class="down">Down</span>
+                        {% endif %}
+                        - Last Checked: {{ entry.last_checked }}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endfor %}
+</body>
+</html>
