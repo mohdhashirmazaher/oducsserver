@@ -11,41 +11,38 @@
         h1 {
             color: #333;
         }
-        .server-status {
-            margin-bottom: 20px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .server-status h2 {
-            margin-top: 0;
-        }
-        .up {
-            color: green;
-        }
-        .down {
-            color: red;
+        .card-header {
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
     <h1>Historical Data</h1>
-    {% for server, data in historical_data.items() %}
-        <div class="server-status">
-            <h2>{{ server }} - Historical Data</h2>
-            <ul>
-                {% for entry in data %}
-                    <li>
-                        {% if entry.status %}
-                            <span class="up">Up</span>
-                        {% else %}
-                            <span class="down">Down</span>
-                        {% endif %}
-                        - Last Checked: {{ entry.last_checked }}
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-    {% endfor %}
+    <div class="accordion" id="historicalAccordion">
+        {% for server, data in historical_data.items() %}
+            <div class="card">
+                <div class="card-header" id="heading{{ loop.index }}">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse{{ loop.index }}" aria-expanded="true" aria-controls="collapse{{ loop.index }}">
+                            {{ server }} - Historical Data
+                        </button>
+                    </h2>
+                </div>
+
+                <div id="collapse{{ loop.index }}" class="collapse" aria-labelledby="heading{{ loop.index }}" data-parent="#historicalAccordion">
+                    <div class="card-body">
+                        <ul>
+                            {% for entry in data %}
+                                <li>{{ "Up" if entry.status else "Down" }} - Last Checked: {{ entry.last_checked }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -43,6 +43,14 @@
 </head>
 <body>
     <h1>Computer Science Server Status</h1>
+    <form action="/" method="post">
+        <div class="form-group">
+            <label for="url">Enter the URL to check:</label>
+            <input type="text" class="form-control" id="url" name="url" placeholder="https://example.com" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Check Status</button>
+    </form>
+
     <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">
             <a class="nav-link active" data-toggle="tab" href="#current-status">Current Status</a>
@@ -54,6 +62,26 @@
 
     <div class="tab-content">
         <div id="current-status" class="container tab-pane active"><br>
+            {% if url_status %}
+                <div class="server-status">
+                    <h2>{{ url_status.url }}</h2>
+                    {% if url_status.status %}
+                        <p class="up">The server is up and running!</p>
+                        <p>Response Time: {{ url_status.response_time }} seconds</p>
+                    {% else %}
+                        <p class="down">The server is down.</p>
+                    {% endif %}
+                    <div class="headers">
+                        <h3>Headers:</h3>
+                        <ul>
+                            {% for header, value in url_status.headers.items() %}
+                                <li><strong>{{ header }}:</strong> {{ value }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <p>Last Checked: {{ url_status.last_checked }}</p>
+                </div>
+            {% endif %}
             {% for server, info in statuses.items() %}
                 <div class="server-status">
                     <h2>{{ server }}</h2>
